@@ -1,4 +1,4 @@
-package com.github.lessangho.dev.webfluxstudy
+package com.github.leesangho.dev.webfluxstudy
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

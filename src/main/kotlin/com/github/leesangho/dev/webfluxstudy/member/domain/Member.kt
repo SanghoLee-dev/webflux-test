@@ -1,9 +1,4 @@
 package com.github.leesangho.dev.webfluxstudy.member.domain
 
-import java.util.*
-
-class Member {
-    val name: String = ""
-    val memberId: MemberId = MemberId(UUID.randomUUID())
-
+class Member(val id: Long?, val name: String) {
 }
