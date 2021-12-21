@@ -9,6 +9,10 @@ data class MemberEntity(private val name: String) {
     @Id
     private var id: Long? = null
 
+    constructor(id: Long, name: String) : this(name) {
+        this.id = id
+    }
+
     fun fromThis(): Member {
         return Member(id, name)
     }
