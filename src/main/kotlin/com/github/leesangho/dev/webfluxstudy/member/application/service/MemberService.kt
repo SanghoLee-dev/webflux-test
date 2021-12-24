@@ -4,6 +4,7 @@ import com.github.leesangho.dev.webfluxstudy.member.adaptor.out.persistence.Memb
 import com.github.leesangho.dev.webfluxstudy.member.adaptor.out.persistence.MemberR2dbcRepository
 import com.github.leesangho.dev.webfluxstudy.member.application.port.`in`.MemberCreateCommand
 import com.github.leesangho.dev.webfluxstudy.member.domain.Member
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import java.util.*
@@ -18,5 +19,9 @@ class MemberService(val memberR2dbcRepository: MemberR2dbcRepository) {
     fun addMember(memberCreateCommand: MemberCreateCommand): Mono<Member> {
         return memberR2dbcRepository.save<MemberEntity?>(MemberEntity(memberCreateCommand.name))
             .map(MemberEntity::fromThis)
+    }
+
+    fun deleteMember(id: Long): Mono<Void> {
+        return memberR2dbcRepository.deleteById(id)
     }
 }

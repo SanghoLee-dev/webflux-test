@@ -36,4 +36,11 @@ class MemberHandler(val memberService: MemberService) {
                 return@map ResponseEntity.notFound().build<Member>()
             }
     }
+
+    @DeleteMapping("/{id}")
+    fun deleteMember(@PathVariable id: Long): Mono<ResponseEntity<Void>> {
+        return memberService.deleteMember(id)
+            .map { return@map ResponseEntity.noContent().build() }
+    }
+
 }
