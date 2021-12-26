@@ -13,11 +13,12 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
 import org.mockito.junit.jupiter.MockitoExtension
 import reactor.core.publisher.Mono
+import reactor.test.StepVerifier
 
 @ExtendWith(MockitoExtension::class)
 internal class MemberServiceTest {
 
-    private lateinit var memberService: MemberService;
+    private lateinit var memberService: MemberService
 
     @Mock
     private lateinit var memberR2dbcRepository: MemberR2dbcRepository
@@ -60,6 +61,23 @@ internal class MemberServiceTest {
         // then
         assertThat(member.id).isNotNull()
         assertThat(member.name).isEqualTo(name)
+    }
+
+    @Test
+    @DisplayName("사용자 제거")
+    fun deleteMember() {
+        // given
+        val id = 1L
+        `when`(memberR2dbcRepository.deleteById(id))
+            .thenReturn(Mono.empty<Void?>().then())
+
+        // when
+        val deleteMember = memberService.deleteMember(id)
+
+        // then
+        StepVerifier.create(deleteMember)
+            .expectNextCount(0)
+            .verifyComplete()
     }
 
     @Test
