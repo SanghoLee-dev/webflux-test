@@ -1,8 +1,10 @@
 package com.github.leesangho.dev.webfluxstudy.member.adaptor.`in`.web
 
+import com.github.leesangho.dev.webfluxstudy.member.application.port.`in`.MemberCreateCommand
 import com.github.leesangho.dev.webfluxstudy.member.application.service.MemberService
 import com.github.leesangho.dev.webfluxstudy.member.domain.Member
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
@@ -25,6 +27,7 @@ internal class MemberHandlerTest {
     }
 
     @Test
+    @DisplayName("사용자 조회 API 성공 테스트")
     fun getMember() {
         // given
         val id = 1L
@@ -44,7 +47,23 @@ internal class MemberHandlerTest {
     }
 
     @Test
+    @DisplayName("사용자 등록 API 성공 테스트")
     fun addMember() {
+        // given
+        val id = 1L
+        val name = "test"
+        val memberCreateCommand = MemberCreateCommand(name)
+        given(memberService.addMember(memberCreateCommand))
+            .willReturn(Mono.just(Member(id, name)))
+
+        // when
+        client.post().uri("/members")
+            .body(Mono.just(memberCreateCommand), memberCreateCommand.javaClass)
+            .exchange()
+        // then
+            .expectBody()
+            .jsonPath("$.id").isEqualTo(id)
+            .jsonPath("$.name").isEqualTo(name)
     }
 
     @Test
