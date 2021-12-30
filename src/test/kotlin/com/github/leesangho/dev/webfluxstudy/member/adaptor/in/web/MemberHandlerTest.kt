@@ -61,13 +61,30 @@ internal class MemberHandlerTest {
             .body(Mono.just(memberCreateCommand), memberCreateCommand.javaClass)
             .exchange()
         // then
+            .expectStatus().isCreated
             .expectBody()
             .jsonPath("$.id").isEqualTo(id)
             .jsonPath("$.name").isEqualTo(name)
     }
 
     @Test
+    @DisplayName("사용자 삭제 API 성공 테스트")
     fun deleteMember() {
+        // given
+        val id = 1L
+        val name = "test"
+        given(memberService.getMember(id))
+            .willReturn(Mono.just(Member(id, name)))
+
+        given(memberService.deleteMemberById(id))
+            .willReturn(Mono.empty())
+
+        // when
+        client.delete().uri("/members/{id}", id)
+            .exchange()
+        // then
+            .expectStatus().isNoContent
+            .expectBody().isEmpty
     }
 
     @Test

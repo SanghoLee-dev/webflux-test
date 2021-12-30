@@ -72,7 +72,7 @@ internal class MemberServiceTest {
             .thenReturn(Mono.empty<Void?>().then())
 
         // when
-        val deleteMember = memberService.deleteMember(id)
+        val deleteMember = memberService.deleteMemberById(id)
 
         // then
         StepVerifier.create(deleteMember)
