@@ -12,8 +12,12 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
+import java.util.stream.IntStream
 
 @ExtendWith(MockitoExtension::class)
 internal class MemberServiceTest {
@@ -26,6 +30,25 @@ internal class MemberServiceTest {
     @BeforeEach
     internal fun setUp() {
         memberService = MemberService(memberR2dbcRepository)
+    }
+
+    @Test
+    @DisplayName("사용자 목록 조회")
+    fun getMembers() {
+        // given
+        val membersStream = IntStream.range(0, 10)
+            .mapToObj { i -> MemberEntity(i.toLong(), "test_$i") }
+
+        `when`(memberR2dbcRepository.findAll(Pageable.ofSize(10), Sort.unsorted()))
+            .thenReturn(Flux.fromStream(membersStream))
+
+        // when
+        val members = memberService.getMembers(Pageable.ofSize(10), Sort.unsorted())
+
+        // then
+        StepVerifier.create(members)
+            .expectNextCount(10)
+            .verifyComplete()
     }
 
     @Test
