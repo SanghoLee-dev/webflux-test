@@ -14,7 +14,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Mono
 
 @ExtendWith(MockitoExtension::class)
-internal class MemberHandlerTest {
+internal class MemberRestControllerTest {
     private lateinit var client: WebTestClient
 
     @Mock
@@ -22,7 +22,7 @@ internal class MemberHandlerTest {
 
     @BeforeEach
     internal fun setUp() {
-        client = WebTestClient.bindToController(MemberHandler(memberService))
+        client = WebTestClient.bindToController(MemberRestController(memberService))
             .build()
     }
 
@@ -75,9 +75,9 @@ internal class MemberHandlerTest {
         val name = "test"
         given(memberService.getMember(id))
             .willReturn(Mono.just(Member(id, name)))
-
+//
         given(memberService.deleteMemberById(id))
-            .willReturn(Mono.empty())
+            .willReturn(Mono.empty<Void?>().then())
 
         // when
         client.delete().uri("/members/{id}", id)

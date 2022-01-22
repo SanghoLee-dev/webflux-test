@@ -12,10 +12,10 @@ import reactor.core.publisher.Mono
 
 @Service
 class MemberService(val memberR2dbcRepository: MemberR2dbcRepository) {
-    fun getMembers(pageable: Pageable, sort: Sort): Flux<Member> {
-        return memberR2dbcRepository.findAll(pageable, sort)
-            .map(MemberEntity::fromThis)
-    }
+//    fun getMembers(pageable: Pageable, sort: Sort): Flux<Member> {
+//        return memberR2dbcRepository.findAll(pageable, sort)
+//            .map(MemberEntity::fromThis)
+//    }
 
     fun getMember(id: Long): Mono<Member> {
         return memberR2dbcRepository.findById(id)
